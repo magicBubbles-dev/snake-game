@@ -67,7 +67,7 @@ function nextTick(){
             drawSnake();
             checkGameOver();
             nextTick();
-        }, 75)
+        }, 65)
     }
     else{
         displayGameOver();
