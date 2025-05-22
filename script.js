@@ -2,6 +2,7 @@ const gameBoard = document.querySelector("#gameBoard");
 const ctx = gameBoard.getContext('2d');
 const scoreText = document.querySelector('#scoreText');
 const rbutton = document.querySelector('#button');
+const sbutton = document.querySelector('#start')
 
 const gameWidth = gameBoard.width;
 const gameHeight = gameBoard.height;
@@ -29,18 +30,34 @@ let snake = [
 
 window.addEventListener('keydown', changeDirection);
 rbutton.addEventListener('click', resetGame);
+sbutton.addEventListener('click', startGame);
 
-gameStart();
+
+rbutton.style.display = 'none';   
+drawInitialBoardAndSnake();       
+
+// Start button click handler
+function startGame(){
+    sbutton.style.display = 'none';
+    rbutton.style.display = 'inline-block';
+    gameStart();
+}
 
 function gameStart(){
     running = true;
+    score = 0;
     scoreText.textContent = score;
     createFood();
+    clearBoard();
     drawFood();
+    drawSnake();
     nextTick();
-    
-};
+}
 
+function drawInitialBoardAndSnake(){
+    clearBoard();
+    drawSnake();
+}
 function nextTick(){
     if(running){
         tickTimeout = setTimeout(()=>{
@@ -165,15 +182,22 @@ function displayGameOver(){
 
 function resetGame(){
     clearTimeout(tickTimeout);
+    running = false;  // stop the game loop
     score = 0;
     xVel = unitSize;
-    yVel = 0
+    yVel = 0;
     snake = [
-        {x:unitSize*4, y:0},
-        {x:unitSize*3, y:0},
-        {x:unitSize*2, y:0},
+        {x:0, y:0},       
         {x:unitSize, y:0},
-        {x:0, y:0}
-    ]; 
-    gameStart();
-};
+        {x:unitSize*2, y:0},
+        {x:unitSize*3, y:0},
+        {x:unitSize*4, y:0}
+    ];
+    scoreText.textContent = score;
+
+    // Show start button, hide reset button
+    sbutton.style.display = 'inline-block';
+    rbutton.style.display = 'none';
+
+    drawInitialBoardAndSnake();  
+}
