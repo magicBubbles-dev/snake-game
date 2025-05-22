@@ -1,0 +1,31 @@
+
+body{
+    background-color: blanchedalmond;
+}
+
+#gameContainer{
+    text-align: center;
+    margin: 50px;
+    
+}
+
+#gameBoard{
+    border: 20px solid black;
+    ;
+}
+
+#scoreText{
+    font-family:'Courier New', Courier, monospace;
+    font-size: 90px;
+}
+
+#button{
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 25px;
+    width: 100px;
+    height: 50px;
+    border: 3px solid;
+    border-radius: 16px;
+
+
+}
