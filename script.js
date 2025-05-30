@@ -12,6 +12,10 @@ const snakeBorder = 'black';
 const foodColor = 'white';
 const unitSize = 25;
 
+const gameOver = new Audio('game-over2.mp3');
+const gameBegins = new Audio('snake-game.mp3');
+
+
 let running = false;
 let xVel = unitSize;
 let yVel = 0; 
@@ -49,6 +53,7 @@ function startGame() {
 
     sbutton.style.display = 'none';
     rbutton.style.display = 'inline-block';
+    
     gameStart();
 }
 
@@ -60,6 +65,7 @@ function gameStart() {
     drawFood();
     drawSnake();
     nextTick();
+    gameBegins.play();
 }
 
 function drawInitialBoardAndSnake() {
@@ -180,20 +186,61 @@ function checkGameOver() {
         if (snake[i].x === snake[0].x && snake[i].y === snake[0].y) {
             running = false;
             break;
+            
         }
     }
+    
 }
 
 function displayGameOver() {
+    let isVisible = true;
+    const blinks = 300;
+
+    running = false;
+    gameBegins.pause();
+    gameBegins.currentTime = 0;
+    gameOver.play();
+
+    // Initial static text
     ctx.font = "50px MV Boli";
     ctx.fillStyle = "white";
     ctx.textAlign = "center";
     ctx.fillText("GAME OVER!!", gameWidth / 2, gameHeight / 2);
-    running = false;
+
+    // Start blinking effect
+    blinkText = setInterval(() => {
+        clearBoard();
+        if (isVisible) {
+            ctx.font = "50px MV Boli";
+            ctx.fillStyle = "white";
+            ctx.textAlign = "center";
+            ctx.fillText("GAME OVER!!", gameWidth / 2, gameHeight / 2);
+        }
+        isVisible = !isVisible;
+    }, blinks);
+
+    // Stop blinking after 3 seconds
+    setTimeout(() => {
+        clearInterval(blinkText);
+        blinkText = null;
+
+        // Draw final static message
+        clearBoard();
+        ctx.font = "50px MV Boli";
+        ctx.fillStyle = "white";
+        ctx.textAlign = "center";
+        ctx.fillText("GAME OVER!!", gameWidth / 2, gameHeight / 2);
+    }, 3000);
 }
+
 
 function resetGame() {
     clearTimeout(tickTimeout);
+    if (blinkText) {
+        clearInterval(blinkText);
+        blinkText = null;
+    }
+
     running = false;
     score = 0;
     xVel = unitSize;
@@ -211,4 +258,4 @@ function resetGame() {
     rbutton.style.display = 'none';
 
     drawInitialBoardAndSnake();
-}
+}   
